@@ -2,41 +2,41 @@
   {
     "needs": null,
     "say": "DO: rename the config key to retry_limit everywhere, docs included.",
-    "does": "Checks it won't break anything, then makes the change."
+    "does": "Makes the change, after a quick check that it won't break anything."
   },
   {
     "needs": null,
-    "say": "CONSIDER: is the no-network rule in our tests still earning its keep? I suspect recorded fixtures would catch more.",
-    "does": "Argues both sides and pushes back if you're wrong. Any change it wants, it proposes in writing. Your files stay put."
+    "say": "CONSIDER: is the no-network rule in our tests still earning its keep?",
+    "does": "Argues it out and pushes back if you're wrong. Touches nothing."
   },
   {
     "needs": null,
-    "say": "1. Ship the parser fix and commit. 2. CONSIDER: moving the slow nightly sources onto their own schedule.",
-    "does": "Ships and commits item 1. Gives you a written take on item 2. A marker covers only what it tags."
+    "say": "1. Ship the parser fix. 2. CONSIDER: moving the slow nightly jobs to their own schedule.",
+    "does": "Ships item 1. Writes up item 2."
   },
   {
     "needs": null,
     "say": "DO: sketch three designs for the import flow. Plan only, build nothing yet.",
-    "does": "Writes up three designs and edits nothing. When a message limits its own scope, the limit wins."
+    "does": "Writes up three designs. You said plan only, so that wins."
   },
   {
     "needs": "coldread",
-    "say": "TRY(coldread:) rewrite the install section, then have a fresh agent follow it cold.",
-    "does": "Drafts it in scratch and hands it to a reviewer with no context. Keeps it only if it clears that read."
+    "say": "TRY(coldread:) rewrite the install section, then have a fresh agent follow it.",
+    "does": "Drafts it in scratch. Keeps it only if a reviewer with no context can follow it."
   },
   {
     "needs": "yourcall",
     "say": "TRY(yourcall:) the CLI's error messages read curt. Soften them if you think it helps.",
-    "does": "Makes the call either way, then leaves a three-line receipt saying how it read you and why."
+    "does": "Decides, then leaves a three-line receipt on how it read you."
   },
   {
     "needs": "showme",
     "say": "TRY(showme:) a dark-mode version of the settings page.",
-    "does": "Builds it in scratch and shows you the real thing. You keep it or toss it."
+    "does": "Builds it in scratch and shows you the thing itself, not a plan for it."
   },
   {
     "needs": "learn",
-    "say": "learn: staging resets every Sunday night, so Monday-morning row counts mean nothing.",
-    "does": "Says it back in its own words and flags gaps. Acts on nothing."
+    "say": "learn: staging resets every Sunday night, so Monday row counts mean nothing.",
+    "does": "Says it back in its own words. Acts on nothing."
   }
 ]

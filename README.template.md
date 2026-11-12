@@ -1,29 +1,18 @@
 # DO / TRY / CONSIDER
 
-*Feedback markers for coding agents.* Paste a block into `CLAUDE.md`,
-`AGENTS.md`, `.cursorrules`, or your system prompt. That's the install.
+Feedback markers for coding agents. Paste a block into `CLAUDE.md`,
+`AGENTS.md`, `.cursorrules`, or your system prompt, and you're installed.
 
-## Why bother
+Muse "huh, wouldn't it be cool if X" at a coding agent, and there's a fair
+chance X is now in your files. (Ask too softly and you get the reverse: a
+suggestion when you wanted the change.) Either way, you end up managing the
+agent's guesswork instead of doing your work.
 
-Say "consider X" to a coding agent, or just muse "huh, wouldn't it be cool if
-X," and there's a fair chance X is now in your files. Agents lean hard toward
-doing. Every shade of intent gets rounded up to an edit, and you get to find it,
-undo it, and check what else moved.
+So mark your intent. `CONSIDER:` means think it through and tell me. `DO:`
+means make the change. The agent takes your marker *at face value*, and
+anything unmarked and unclear leaves your files alone.
 
-Newer agents also miss the other way. Ask softly ("could we tighten this up?")
-and you may get a suggestion back when you wanted the change.
-
-So you adapt. You tack "don't change anything yet" onto one message and "no,
-actually do it" onto the next. Either way you're managing the agent's guesswork
-instead of doing your work.
-
-This gives you a small, closed set of markers for your own feedback. `CONSIDER:`
-means think it through and propose in writing. `DO:` means make the change. The
-agent takes the marker at face value instead of guessing what you *really*
-meant, and anything unmarked and ambiguous defaults to leaving your files alone.
-
-If you've ever reverted an edit you only wondered out loud about, this is for
-you.
+That's most of it.
 
 ## What it looks like
 
@@ -32,18 +21,12 @@ you.
 ## Pick a size
 
 > [!TIP]
-> **Rather answer a few questions?** Open [`builder.html`](builder.html). It
-> builds a block to fit how you work, runs offline, and sends nothing anywhere.
-> Same text as the blocks below.
+> **Rather answer a few questions?** The [builder](builder.html) makes a block
+> that fits how you work. It runs offline and sends nothing anywhere.
 
 {{TIER_TABLE}}
 
-Start with Core: it's the smallest block that works on its own. Move to
-Standard when you hand work to subagents; it stops a `CONSIDER:` from quietly
-becoming a `DO:` on the way across. Full adds `TRY`, where the agent builds something in scratch and a gate
-decides whether it stays: a fresh reviewer, the agent itself (with a receipt),
-or you. That last one differs from plan mode. You judge the finished thing, not
-a description of it.
+Start with Core, and step up when you hit the problem a bigger block solves.
 
 ### Core
 
@@ -65,35 +48,23 @@ a description of it.
 
 ## Before you paste
 
-A few settings are one person's calibration, plus one check. Decide them on
-purpose.
-
-- **The marker is final.** The block tells the agent never to second-guess your
-  marker, even if it suspects you mislabeled it. If you'd rather it flag a
-  mismatch, the builder has a header for that. (Fair warning: it hands the call
-  back to the agent's judgment, which is the thing you were routing around.)
-- **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, or
-  runs headless or on a schedule, cut it.
-- **Gate names are yours.** Rename `showme` if your own name reads better in a
-  transcript. Just keep the set closed.
-- **Check for rules that pull the other way.** If the same file also says
-  something like "default to action," the agent now has two rules and may
-  follow either one. Keep the one you mean.
+- **The marker is final.** The agent never second-guesses it. Would you rather
+  it flag a mismatch? The builder has a header for that (it hands the call back
+  to the agent, which is what you were routing around).
+- **Look for rules that pull the other way,** like "default to action." Give an
+  agent two conflicting rules and it may follow either.
+- **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, cut it.
 
 ## After you paste
 
-Check that the file you edited is the one your agent actually reads. It's easy
-to have this working through an agent's memory on one machine and nowhere else.
+Check that your agent actually reads the file you edited. (Claude Code skips
+`AGENTS.md` when there's a `CLAUDE.md`; put `@AGENTS.md` in the `CLAUDE.md` to
+pull it in.)
 
-One trap to know about: Claude Code reads `AGENTS.md` only when there's no
-`CLAUDE.md` in that folder or above it. If you have both, add a line with
-`@AGENTS.md` to your `CLAUDE.md` so it pulls the other file in.
+## Editing
 
-## Editing the protocol
-
-`README.md` and `builder.html` are generated from `fragments/` and
-`tiers.json`, plus the examples in `examples.json`. Do not edit the generated
-files. Edit the sources, then run:
+`README.md` and `builder.html` are generated. Edit `fragments/`, `tiers.json`,
+or `examples.json`, then run:
 
 ```
 python build.py          # regenerate README.md and builder.html
@@ -102,6 +73,5 @@ python -m pytest test/   # check that both are current
 
 ## License
 
-The protocol text is CC0: everything in `fragments/`, the blocks above, and
-anything the builder emits. Take it, cut it, rename it. The tooling is MIT. See
+The protocol text is CC0. Take it, cut it, rename it. The tooling is MIT. See
 [LICENSE](LICENSE).

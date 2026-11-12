@@ -1,62 +1,45 @@
 # DO / TRY / CONSIDER
 
-*Feedback markers for coding agents.* Paste a block into `CLAUDE.md`,
-`AGENTS.md`, `.cursorrules`, or your system prompt. That's the install.
+Feedback markers for coding agents. Paste a block into `CLAUDE.md`,
+`AGENTS.md`, `.cursorrules`, or your system prompt, and you're installed.
 
-## Why bother
+Muse "huh, wouldn't it be cool if X" at a coding agent, and there's a fair
+chance X is now in your files. (Ask too softly and you get the reverse: a
+suggestion when you wanted the change.) Either way, you end up managing the
+agent's guesswork instead of doing your work.
 
-Say "consider X" to a coding agent, or just muse "huh, wouldn't it be cool if
-X," and there's a fair chance X is now in your files. Agents lean hard toward
-doing. Every shade of intent gets rounded up to an edit, and you get to find it,
-undo it, and check what else moved.
+So mark your intent. `CONSIDER:` means think it through and tell me. `DO:`
+means make the change. The agent takes your marker *at face value*, and
+anything unmarked and unclear leaves your files alone.
 
-Newer agents also miss the other way. Ask softly ("could we tighten this up?")
-and you may get a suggestion back when you wanted the change.
-
-So you adapt. You tack "don't change anything yet" onto one message and "no,
-actually do it" onto the next. Either way you're managing the agent's guesswork
-instead of doing your work.
-
-This gives you a small, closed set of markers for your own feedback. `CONSIDER:`
-means think it through and propose in writing. `DO:` means make the change. The
-agent takes the marker at face value instead of guessing what you *really*
-meant, and anything unmarked and ambiguous defaults to leaving your files alone.
-
-If you've ever reverted an edit you only wondered out loud about, this is for
-you.
+That's most of it.
 
 ## What it looks like
 
 | You write | The agent |
 |---|---|
-| `DO: rename the config key to retry_limit everywhere, docs included.` | Checks it won't break anything, then makes the change. |
-| `CONSIDER: is the no-network rule in our tests still earning its keep? I suspect recorded fixtures would catch more.` | Argues both sides and pushes back if you're wrong. Any change it wants, it proposes in writing. Your files stay put. |
-| `1. Ship the parser fix and commit. 2. CONSIDER: moving the slow nightly sources onto their own schedule.` | Ships and commits item 1. Gives you a written take on item 2. A marker covers only what it tags. |
-| `DO: sketch three designs for the import flow. Plan only, build nothing yet.` | Writes up three designs and edits nothing. When a message limits its own scope, the limit wins. |
-| `TRY(coldread:) rewrite the install section, then have a fresh agent follow it cold.` *(Full block)* | Drafts it in scratch and hands it to a reviewer with no context. Keeps it only if it clears that read. |
-| `TRY(yourcall:) the CLI's error messages read curt. Soften them if you think it helps.` *(Full block)* | Makes the call either way, then leaves a three-line receipt saying how it read you and why. |
-| `TRY(showme:) a dark-mode version of the settings page.` *(Full block)* | Builds it in scratch and shows you the real thing. You keep it or toss it. |
-| `learn: staging resets every Sunday night, so Monday-morning row counts mean nothing.` *(Full block)* | Says it back in its own words and flags gaps. Acts on nothing. |
+| `DO: rename the config key to retry_limit everywhere, docs included.` | Makes the change, after a quick check that it won't break anything. |
+| `CONSIDER: is the no-network rule in our tests still earning its keep?` | Argues it out and pushes back if you're wrong. Touches nothing. |
+| `1. Ship the parser fix. 2. CONSIDER: moving the slow nightly jobs to their own schedule.` | Ships item 1. Writes up item 2. |
+| `DO: sketch three designs for the import flow. Plan only, build nothing yet.` | Writes up three designs. You said plan only, so that wins. |
+| `TRY(coldread:) rewrite the install section, then have a fresh agent follow it.` *(Full block)* | Drafts it in scratch. Keeps it only if a reviewer with no context can follow it. |
+| `TRY(yourcall:) the CLI's error messages read curt. Soften them if you think it helps.` *(Full block)* | Decides, then leaves a three-line receipt on how it read you. |
+| `TRY(showme:) a dark-mode version of the settings page.` *(Full block)* | Builds it in scratch and shows you the thing itself, not a plan for it. |
+| `learn: staging resets every Sunday night, so Monday row counts mean nothing.` *(Full block)* | Says it back in its own words. Acts on nothing. |
 
 ## Pick a size
 
 > [!TIP]
-> **Rather answer a few questions?** Open [`builder.html`](builder.html). It
-> builds a block to fit how you work, runs offline, and sends nothing anywhere.
-> Same text as the blocks below.
+> **Rather answer a few questions?** The [builder](builder.html) makes a block
+> that fits how you work. It runs offline and sends nothing anywhere.
 
 | Block | Lines | What it covers |
 |---|---|---|
-| Core | 51 | DO, CONSIDER, and the two defaults behind them. Start here. |
-| Standard | 62 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
-| Full | 95 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
+| Core | 51 | DO, CONSIDER, and the defaults behind them. Start here. |
+| Standard | 62 | Adds rules for multi-message work and subagents. |
+| Full | 95 | Adds TRY: attempt first, then a gate decides what stays. |
 
-Start with Core: it's the smallest block that works on its own. Move to
-Standard when you hand work to subagents; it stops a `CONSIDER:` from quietly
-becoming a `DO:` on the way across. Full adds `TRY`, where the agent builds something in scratch and a gate
-decides whether it stays: a fresh reviewer, the agent itself (with a receipt),
-or you. That last one differs from plan mode. You judge the finished thing, not
-a description of it.
+Start with Core, and step up when you hit the problem a bigger block solves.
 
 ### Core
 
@@ -289,35 +272,23 @@ them costs nothing because they do not touch files.
 
 ## Before you paste
 
-A few settings are one person's calibration, plus one check. Decide them on
-purpose.
-
-- **The marker is final.** The block tells the agent never to second-guess your
-  marker, even if it suspects you mislabeled it. If you'd rather it flag a
-  mismatch, the builder has a header for that. (Fair warning: it hands the call
-  back to the agent's judgment, which is the thing you were routing around.)
-- **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, or
-  runs headless or on a schedule, cut it.
-- **Gate names are yours.** Rename `showme` if your own name reads better in a
-  transcript. Just keep the set closed.
-- **Check for rules that pull the other way.** If the same file also says
-  something like "default to action," the agent now has two rules and may
-  follow either one. Keep the one you mean.
+- **The marker is final.** The agent never second-guesses it. Would you rather
+  it flag a mismatch? The builder has a header for that (it hands the call back
+  to the agent, which is what you were routing around).
+- **Look for rules that pull the other way,** like "default to action." Give an
+  agent two conflicting rules and it may follow either.
+- **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, cut it.
 
 ## After you paste
 
-Check that the file you edited is the one your agent actually reads. It's easy
-to have this working through an agent's memory on one machine and nowhere else.
+Check that your agent actually reads the file you edited. (Claude Code skips
+`AGENTS.md` when there's a `CLAUDE.md`; put `@AGENTS.md` in the `CLAUDE.md` to
+pull it in.)
 
-One trap to know about: Claude Code reads `AGENTS.md` only when there's no
-`CLAUDE.md` in that folder or above it. If you have both, add a line with
-`@AGENTS.md` to your `CLAUDE.md` so it pulls the other file in.
+## Editing
 
-## Editing the protocol
-
-`README.md` and `builder.html` are generated from `fragments/` and
-`tiers.json`, plus the examples in `examples.json`. Do not edit the generated
-files. Edit the sources, then run:
+`README.md` and `builder.html` are generated. Edit `fragments/`, `tiers.json`,
+or `examples.json`, then run:
 
 ```
 python build.py          # regenerate README.md and builder.html
@@ -326,6 +297,5 @@ python -m pytest test/   # check that both are current
 
 ## License
 
-The protocol text is CC0: everything in `fragments/`, the blocks above, and
-anything the builder emits. Take it, cut it, rename it. The tooling is MIT. See
+The protocol text is CC0. Take it, cut it, rename it. The tooling is MIT. See
 [LICENSE](LICENSE).

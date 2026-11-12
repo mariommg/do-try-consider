@@ -2,7 +2,7 @@
   "core": {
     "label": "Core",
     "markers": "DO / CONSIDER",
-    "blurb": "DO, CONSIDER, and the two defaults behind them. Start here.",
+    "blurb": "DO, CONSIDER, and the defaults behind them. Start here.",
     "sections": [
       {
         "heading": null,
@@ -29,7 +29,7 @@
   "standard": {
     "label": "Standard",
     "markers": "DO / CONSIDER",
-    "blurb": "Core, plus rules that keep markers intact across messages and subagents. For when you hand work off.",
+    "blurb": "Adds rules for multi-message work and subagents.",
     "sections": [
       {
         "heading": null,
@@ -59,7 +59,7 @@
   "full": {
     "label": "Full",
     "markers": "DO / TRY / CONSIDER",
-    "blurb": "Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper.",
+    "blurb": "Adds TRY: attempt first, then a gate decides what stays.",
     "sections": [
       {
         "heading": null,
