@@ -4,15 +4,15 @@
 `AGENTS.md`, `.cursorrules`, or your system prompt, and you're installed 
 and ready to go.
 
-**Why you may want this.** Today's models have a very powerful bias towards
-action. If you're anything like me and you tend to think non-linearly (with
+**Why you may want this.** Today's models have a very powerful bias toward
+action. If you're anything like me and you tend to think _non-linearly_ (with
 asides, meta-commentary, mental footnotes) - you may be getting in the habit
 of censoring your own valuable thinking just so your agents don't run off on
 wild goose chases, doing the things you merely wanted to learn about.
 
 If you think-aloud something like "huh, wouldn't it be cool if X" at a 
-coding agent, and there's a fair chance X is now in your files. (Ask too 
-softly and you get the reverse: a suggestion when you wanted the change.) 
+coding agent... then there's a fair chance X is now in your files. Ask too 
+softly and you get the reverse: a suggestion when you wanted the change.
 Either way, you end up _managing the agent's guesswork instead of doing 
 your own work_.
 
@@ -60,11 +60,11 @@ got the mental habit of tagging feedback and want more channels to do it.
 - **The marker is final.** The agent never second-guesses it. Would you rather
   it flag a mismatch? The builder has a header for that (it hands the call back
   to the agent, which is what you were routing around). _This takes a little mental
-  adjustment (or at least, it did for me).
+  adjustment (or at least, it did for me)_.
 - **Look for rules that pull the other way,** like "default to action." Give an
   agent two conflicting rules and it may follow either.
 - **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, cut it.
-Most modern harnesses will do this seamlessly, but DO: check your setup.
+  Most modern harnesses will do this seamlessly, but DO: check your setup.
 
 ## After you paste
 
