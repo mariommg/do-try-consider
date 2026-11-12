@@ -48,8 +48,8 @@ you.
 | Block | Lines | What it covers |
 |---|---|---|
 | Core | 51 | DO, CONSIDER, and the two defaults behind them. Start here. |
-| Standard | 61 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
-| Full | 94 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
+| Standard | 62 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
+| Full | 95 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
 
 Start with Core: it's the smallest block that works on its own. Move to
 Standard when you hand work to subagents; it stops a `CONSIDER:` from quietly
@@ -63,7 +63,7 @@ a description of it.
 ```markdown
 ## Feedback markers (DO / CONSIDER)
 
-At decision points I mark my feedback with a capitalized-colon token. A marker
+At decision points I mark my feedback with a token ending in a colon. A marker
 can tag a whole message or one item inside it, and it covers only what it tags.
 Take the marker at face value. Never re-tier it on suspicion that I mislabeled
 it: the marker is mine to own, and second-guessing it puts the failure back
@@ -120,7 +120,7 @@ carry that work through, including the edits it needs, without asking again.
 ```markdown
 ## Feedback markers (DO / CONSIDER)
 
-At decision points I mark my feedback with a capitalized-colon token. A marker
+At decision points I mark my feedback with a token ending in a colon. A marker
 can tag a whole message or one item inside it, and it covers only what it tags.
 Take the marker at face value. Never re-tier it on suspicion that I mislabeled
 it: the marker is mine to own, and second-guessing it puts the failure back
@@ -171,14 +171,15 @@ carry that work through, including the edits it needs, without asking again.
   `CONSIDER`.
 
 - **Per-message scope.** Markers do not latch. A tier applies to the message it
-  appears in, and each message re-marks.
+  appears in, and a marker does not carry into my next message.
 
 - **Propagation.** Markers travel into any delegation to a subagent. Never
   launder a tier across an agent boundary: a `CONSIDER:` from me becomes a
   CONSIDER-shaped subtask, not a silently upgraded DO.
 
 - **Mutation authority.** A deliverable changes only via an explicit `DO:`, an
-  unmarked clear imperative, or a `TRY` whose gate returned "keep."
+  unmarked clear imperative, or, where `TRY` is in use, a `TRY` whose gate
+  returned "keep."
 ```
 
 </details>
@@ -189,7 +190,7 @@ carry that work through, including the edits it needs, without asking again.
 ```markdown
 ## Feedback markers (DO / TRY / CONSIDER)
 
-At decision points I mark my feedback with a capitalized-colon token. A marker
+At decision points I mark my feedback with a token ending in a colon. A marker
 can tag a whole message or one item inside it, and it covers only what it tags.
 Take the marker at face value. Never re-tier it on suspicion that I mislabeled
 it: the marker is mine to own, and second-guessing it puts the failure back
@@ -256,14 +257,15 @@ carry that work through, including the edits it needs, without asking again.
   `CONSIDER`.
 
 - **Per-message scope.** Markers do not latch. A tier applies to the message it
-  appears in, and each message re-marks.
+  appears in, and a marker does not carry into my next message.
 
 - **Propagation.** Markers travel into any delegation to a subagent. Never
   launder a tier across an agent boundary: a `CONSIDER:` from me becomes a
   CONSIDER-shaped subtask, not a silently upgraded DO.
 
 - **Mutation authority.** A deliverable changes only via an explicit `DO:`, an
-  unmarked clear imperative, or a `TRY` whose gate returned "keep."
+  unmarked clear imperative, or, where `TRY` is in use, a `TRY` whose gate
+  returned "keep."
 
 - **Receipt format** (required for `TRY(yourcall:)`, three lines): how I read the
   feedback; what I took its core to be, meaning what I optimized toward; what I
