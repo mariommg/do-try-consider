@@ -29,7 +29,7 @@ That's most of it. There's some more polish available, but it's optional.
 ## Pick a size
 
 > [!TIP]
-> **Want an interactive installer?** The [builder](builder.html) makes a block
+> **Want an interactive installer?** The [builder](https://mariommg.github.io/do-try-consider/builder.html) makes a block
 > that fits how you work. It runs offline and sends nothing anywhere.
 
 {{TIER_TABLE}}
