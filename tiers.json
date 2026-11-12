@@ -1,0 +1,98 @@
+{
+  "core": {
+    "label": "Core",
+    "markers": "DO / CONSIDER",
+    "blurb": "The two tiers and two defaults that six weeks of logged use actually exercised. Start here.",
+    "sections": [
+      {
+        "heading": null,
+        "fragments": [
+          "00-header"
+        ]
+      },
+      {
+        "heading": "### The tiers (closed set)",
+        "fragments": [
+          "10-do",
+          "11-consider"
+        ]
+      },
+      {
+        "heading": "### Defaults that do the real work",
+        "fragments": [
+          "20-tiebreak",
+          "21-musing"
+        ]
+      }
+    ]
+  },
+  "standard": {
+    "label": "Standard",
+    "markers": "DO / CONSIDER",
+    "blurb": "Core plus the rules that matter once markers cross a session or an agent boundary. Add this when you delegate to subagents.",
+    "sections": [
+      {
+        "heading": null,
+        "fragments": [
+          "00-header"
+        ]
+      },
+      {
+        "heading": "### The tiers (closed set)",
+        "fragments": [
+          "10-do",
+          "11-consider"
+        ]
+      },
+      {
+        "heading": "### Defaults that do the real work",
+        "fragments": [
+          "20-tiebreak",
+          "21-musing",
+          "30-scope",
+          "31-propagation",
+          "32-authority"
+        ]
+      }
+    ]
+  },
+  "full": {
+    "label": "Full",
+    "markers": "DO / TRY / CONSIDER",
+    "blurb": "Everything, including the attempt-and-gate tier. Unexercised in the reference deployment - adopt it against a symptom, not on spec.",
+    "sections": [
+      {
+        "heading": null,
+        "fragments": [
+          "00-header"
+        ]
+      },
+      {
+        "heading": "### The tiers (closed set)",
+        "fragments": [
+          "10-do",
+          "11-consider",
+          "40-try"
+        ]
+      },
+      {
+        "heading": "### Defaults that do the real work",
+        "fragments": [
+          "20-tiebreak",
+          "21-musing",
+          "30-scope",
+          "31-propagation",
+          "32-authority",
+          "41-receipt",
+          "42-learn"
+        ]
+      },
+      {
+        "heading": null,
+        "fragments": [
+          "43-plain"
+        ]
+      }
+    ]
+  }
+}

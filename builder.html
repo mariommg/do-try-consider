@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DO / TRY / CONSIDER - block builder</title>
+<style>
+  :root {
+    --bg: #fbfaf8; --fg: #1c1b19; --muted: #6b6862; --line: #e0ddd6;
+    --card: #ffffff; --accent: #7a4b2a; --accent-soft: #f3ece5; --code-bg: #f6f4f1;
+  }
+  :root:not([data-theme="light"]) { }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1917; --fg: #eae7e1; --muted: #a09a91; --line: #34322e;
+      --card: #232120; --accent: #d9a273; --accent-soft: #2c2723; --code-bg: #14130f;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1917; --fg: #eae7e1; --muted: #a09a91; --line: #34322e;
+    --card: #232120; --accent: #d9a273; --accent-soft: #2c2723; --code-bg: #14130f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--fg); margin: 0;
+    font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 20px 64px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 28px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  h1 span { color: var(--accent); }
+  .sub { color: var(--muted); margin: 0; max-width: 68ch; }
+  .cols { display: grid; grid-template-columns: minmax(320px, 5fr) minmax(320px, 6fr); gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .cols { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; }
+  fieldset { border: 0; padding: 0; margin: 0 0 24px; }
+  legend { font-weight: 600; font-size: 14px; padding: 0; margin-bottom: 4px; }
+  .why { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
+  label.opt {
+    display: block; border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 8px; cursor: pointer;
+  }
+  label.opt:hover { border-color: var(--accent); }
+  label.opt input { margin-right: 8px; }
+  label.opt .lab { font-weight: 500; }
+  label.opt .desc { color: var(--muted); font-size: 13px; display: block; margin-left: 22px; }
+  input[type="text"] {
+    font: inherit; padding: 7px 10px; border: 1px solid var(--line);
+    border-radius: 6px; background: var(--bg); color: var(--fg); width: 180px;
+  }
+  .sticky { position: sticky; top: 20px; }
+  .bar { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+  button {
+    font: inherit; font-weight: 500; padding: 8px 14px; border-radius: 7px;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--bg); cursor: pointer;
+  }
+  button.ghost { background: transparent; color: var(--accent); }
+  button:hover { filter: brightness(1.08); }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 16px; overflow-x: auto; max-height: 62vh; overflow-y: auto;
+    font: 12.5px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    white-space: pre; margin: 0;
+  }
+  .meta { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
+  .pill {
+    display: inline-block; background: var(--accent-soft); color: var(--accent);
+    border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600;
+  }
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>DO / TRY / <span>CONSIDER</span> block builder</h1>
+  <p class="sub">
+    Answer what applies to you, then copy the block into your
+    <code>CLAUDE.md</code>, <code>AGENTS.md</code>, <code>.cursorrules</code>, or system prompt.
+    That is the whole install. Everything here runs in your browser, and nothing gets sent
+    anywhere, to me or to anyone.
+  </p>
+</header>
+
+<div class="cols">
+  <form id="form" class="card">
+    <fieldset>
+      <legend>Start from</legend>
+      <p class="why">Core is the part that actually got used: six weeks of one real deployment, every marker held. Everything past it is opt-in, and each one names the problem it solves.</p>
+      <label class="opt"><input type="radio" name="tier" value="core" checked>
+        <span class="lab">Core</span>
+        <span class="desc">DO, CONSIDER, the tie-break rule, the musing guard. Start here.</span></label>
+      <label class="opt"><input type="radio" name="tier" value="standard">
+        <span class="lab">Standard</span>
+        <span class="desc">Adds per-message scope, subagent propagation, mutation authority. Take it when you start delegating.</span></label>
+      <label class="opt"><input type="radio" name="tier" value="full">
+        <span class="lab">Full</span>
+        <span class="desc">Adds the TRY attempt-and-gate tier, receipts, and a teaching marker. Read the caveat below first.</span></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>A mislabeled marker</legend>
+      <p class="why">This is the real calibration, and it decides who owns the mistake when you mark something wrong. Pick it on purpose.</p>
+      <label class="opt"><input type="radio" name="header" value="00-header" checked>
+        <span class="lab">The marker is authoritative</span>
+        <span class="desc">The agent never re-tiers you. Pick this if you would rather manage your own hedging than hand the call back to a classifier.</span></label>
+      <label class="opt"><input type="radio" name="header" value="01-header-reflect">
+        <span class="lab">Reflect a mismatch back</span>
+        <span class="desc">The agent asks first when a marker looks wrong. Safer if you mislabel, but it puts the agent's judgment back in the loop, which is the thing you were routing around.</span></label>
+    </fieldset>
+
+    <fieldset id="tryopts">
+      <legend>Attempt-and-gate</legend>
+      <p class="why">Nobody touched this tier for six weeks. It ships anyway, because the <em>need</em> turned up constantly, just phrased as a question rather than an instruction. Take it if you already know you want a gatekeeper who isn't you.</p>
+      <label class="opt"><input type="checkbox" id="try_coldread" checked>
+        <span class="lab">TRY(coldread:) - a fresh agent rules</span>
+        <span class="desc">Needs a setup that can spawn a subagent. It falls back to inline reasoning where it can't, and it quietly stops working in headless or scheduled runs.</span></label>
+      <label class="opt"><input type="checkbox" id="try_yourcall" checked>
+        <span class="lab">TRY(yourcall:) - the agent rules, with a receipt</span>
+        <span class="desc">Honestly, this is DO with a mandatory comprehension check. The receipt is the part worth having.</span></label>
+      <label class="opt"><input type="checkbox" id="try_showme" checked>
+        <span class="lab">TRY(showme:) - you rule</span>
+        <span class="desc">Built in scratch, shown to you, kept or binned on your say-so. Not a plan for you to approve: the actual thing, then your call on it.</span></label>
+      <p class="why" style="margin-top:12px">
+        What should the "show me" gate be called? Use whatever reads back right in a transcript:
+        <input type="text" id="gate_label" value="showme" maxlength="24">
+      </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Teaching marker</legend>
+      <label class="opt"><input type="checkbox" id="learn">
+        <span class="lab">Include <code>learn:</code></span>
+        <span class="desc">Marks a message as something to absorb rather than act on. Went unused for six weeks, for whatever that is worth.</span></label>
+    </fieldset>
+  </form>
+
+  <div>
+    <div class="sticky">
+      <div class="bar">
+        <button type="button" id="copy">Copy block</button>
+        <button type="button" id="download" class="ghost">Download .md</button>
+        <span class="pill" id="stat">0 lines</span>
+      </div>
+      <pre id="out"></pre>
+      <p class="meta">Paste it under any heading in your standing-instructions file. Then go check that the file you edited is the one your agent actually reads. That one bites people.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Built from the same fragments as the blocks in the README, so the two can't drift apart.
+  <strong>FINDINGS.md</strong> has the evidence behind these defaults, including where it is thin.
+</footer>
+</div>
+
+<script id="data" type="application/json">{
+  "fragments": {
+    "00-header": "## Feedback markers ({{MARKERS}})\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.",
+    "01-header-reflect": "## Feedback markers ({{MARKERS}})\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker as my stated intent. If a marker looks mismatched to what I wrote, say so\nin one line and ask before acting, rather than silently re-tiering it.",
+    "10-do": "- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.",
+    "11-consider": "- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.",
+    "20-tiebreak": "- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.",
+    "21-musing": "- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.",
+    "30-scope": "- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.",
+    "31-propagation": "- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.",
+    "32-authority": "- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.",
+    "40-try": "- **`TRY(gate:)`** Attempt, then gate. The parameter names who rules on whether\n  the attempt is kept. `gate` is one of `coldread`, `yourcall`, `showme`:\n\n  - `TRY(coldread:)` - build it, then route it to a fresh instance with no\n    context from this conversation, ideally a different model family. Keep it if\n    it clears that read. The missing context is the mechanism, not an oversight:\n    do not hand the reviewer the transcript to be helpful. This is the only\n    variant that spawns anything, so a size floor applies: do not spawn for\n    errands. If your environment cannot spawn subagents, degrade to inline\n    reasoning and say that you did.\n  - `TRY(yourcall:)` - your own judgment gates it, and I pre-authorize whichever\n    way you rule. **Never silent.** Emit a receipt (below).\n  - `TRY(showme:)` - build the concrete artifact in scratch, show me, I rule on\n    keep or discard. This is not a plan for my approval: build the thing, then\n    show me the thing.",
+    "41-receipt": "- **Receipt format** (required for `TRY(yourcall:)`, three lines): how I read the\n  feedback; what I took its core to be, meaning what I optimized toward; what I\n  did, and the deciding reason.\n\n  The receipt is a comprehension mirror. It catches confident misreadings, which\n  are more dangerous than wrong decisions because they are invisible. \"I looked\n  at it and I left it as-is\" is a correct and complete outcome, not an unhelpful\n  one.",
+    "42-learn": "- **`learn:`** When I mark a message `learn:` I am teaching you something.\n  Reflect your understanding back, flag gaps, integrate it. Do not act on it,\n  and do not argue both sides.",
+    "43-plain": "Other things I may ask for in plain English (steelman this, strawman it, teach\nme, ELI15) need no marker. You handle those from plain language, and misreading\nthem costs nothing because they do not touch files."
+  },
+  "tiers": {
+    "core": {
+      "label": "Core",
+      "markers": "DO / CONSIDER",
+      "blurb": "The two tiers and two defaults that six weeks of logged use actually exercised. Start here.",
+      "sections": [
+        {
+          "heading": null,
+          "fragments": [
+            "00-header"
+          ]
+        },
+        {
+          "heading": "### The tiers (closed set)",
+          "fragments": [
+            "10-do",
+            "11-consider"
+          ]
+        },
+        {
+          "heading": "### Defaults that do the real work",
+          "fragments": [
+            "20-tiebreak",
+            "21-musing"
+          ]
+        }
+      ]
+    },
+    "standard": {
+      "label": "Standard",
+      "markers": "DO / CONSIDER",
+      "blurb": "Core plus the rules that matter once markers cross a session or an agent boundary. Add this when you delegate to subagents.",
+      "sections": [
+        {
+          "heading": null,
+          "fragments": [
+            "00-header"
+          ]
+        },
+        {
+          "heading": "### The tiers (closed set)",
+          "fragments": [
+            "10-do",
+            "11-consider"
+          ]
+        },
+        {
+          "heading": "### Defaults that do the real work",
+          "fragments": [
+            "20-tiebreak",
+            "21-musing",
+            "30-scope",
+            "31-propagation",
+            "32-authority"
+          ]
+        }
+      ]
+    },
+    "full": {
+      "label": "Full",
+      "markers": "DO / TRY / CONSIDER",
+      "blurb": "Everything, including the attempt-and-gate tier. Unexercised in the reference deployment - adopt it against a symptom, not on spec.",
+      "sections": [
+        {
+          "heading": null,
+          "fragments": [
+            "00-header"
+          ]
+        },
+        {
+          "heading": "### The tiers (closed set)",
+          "fragments": [
+            "10-do",
+            "11-consider",
+            "40-try"
+          ]
+        },
+        {
+          "heading": "### Defaults that do the real work",
+          "fragments": [
+            "20-tiebreak",
+            "21-musing",
+            "30-scope",
+            "31-propagation",
+            "32-authority",
+            "41-receipt",
+            "42-learn"
+          ]
+        },
+        {
+          "heading": null,
+          "fragments": [
+            "43-plain"
+          ]
+        }
+      ]
+    }
+  },
+  "blocks": {
+    "core": "## Feedback markers (DO / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.",
+    "standard": "## Feedback markers (DO / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.\n\n- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.\n\n- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.\n\n- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.",
+    "full": "## Feedback markers (DO / TRY / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n- **`TRY(gate:)`** Attempt, then gate. The parameter names who rules on whether\n  the attempt is kept. `gate` is one of `coldread`, `yourcall`, `showme`:\n\n  - `TRY(coldread:)` - build it, then route it to a fresh instance with no\n    context from this conversation, ideally a different model family. Keep it if\n    it clears that read. The missing context is the mechanism, not an oversight:\n    do not hand the reviewer the transcript to be helpful. This is the only\n    variant that spawns anything, so a size floor applies: do not spawn for\n    errands. If your environment cannot spawn subagents, degrade to inline\n    reasoning and say that you did.\n  - `TRY(yourcall:)` - your own judgment gates it, and I pre-authorize whichever\n    way you rule. **Never silent.** Emit a receipt (below).\n  - `TRY(showme:)` - build the concrete artifact in scratch, show me, I rule on\n    keep or discard. This is not a plan for my approval: build the thing, then\n    show me the thing.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.\n\n- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.\n\n- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.\n\n- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.\n\n- **Receipt format** (required for `TRY(yourcall:)`, three lines): how I read the\n  feedback; what I took its core to be, meaning what I optimized toward; what I\n  did, and the deciding reason.\n\n  The receipt is a comprehension mirror. It catches confident misreadings, which\n  are more dangerous than wrong decisions because they are invisible. \"I looked\n  at it and I left it as-is\" is a correct and complete outcome, not an unhelpful\n  one.\n\n- **`learn:`** When I mark a message `learn:` I am teaching you something.\n  Reflect your understanding back, flag gaps, integrate it. Do not act on it,\n  and do not argue both sides.\n\nOther things I may ask for in plain English (steelman this, strawman it, teach\nme, ELI15) need no marker. You handle those from plain language, and misreading\nthem costs nothing because they do not touch files."
+  }
+}</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById("data").textContent);
+  var form = document.getElementById("form");
+  var out = document.getElementById("out");
+  var stat = document.getElementById("stat");
+
+  function val(name) {
+    var el = form.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : null;
+  }
+
+  function trimTry(text, keep, label) {
+    // Drop the variant bullets the user did not keep. Each is a "  - `TRY(x:)`"
+    // block that runs until the next sibling bullet at the same indent.
+    var lines = text.split("\n");
+    var kept = [], skipping = false;
+    for (var i = 0; i < lines.length; i++) {
+      var m = lines[i].match(/^  - `TRY\((\w+):\)`/);
+      if (m) { skipping = keep.indexOf(m[1]) === -1; }
+      if (!skipping) kept.push(lines[i]);
+    }
+    var res = kept.join("\n");
+    if (label && label !== "showme") {
+      res = res.replace(/TRY\(showme:\)/g, "TRY(" + label + ":)");
+    }
+    // The intro line enumerates the gate names. It has to track the selection,
+    // or a block shipping one variant still advertises three.
+    var names = keep.map(function (k) { return k === "showme" ? label : k; });
+    var list = names.map(function (n) { return "`" + n + "`"; });
+    var phrase = list.length === 1
+      ? "`gate` is " + list[0]
+      : "`gate` is one of " + list.slice(0, -1).join(", ") + " or " + list[list.length - 1];
+    res = res.replace(/`gate` is one of [^:\n]*:/, phrase + ":");
+    return res;
+  }
+
+  function build() {
+    var tierName = val("tier");
+    var tier = DATA.tiers[tierName];
+    var headerKey = val("header");
+    var keep = [];
+    if (document.getElementById("try_coldread").checked) keep.push("coldread");
+    if (document.getElementById("try_yourcall").checked) keep.push("yourcall");
+    if (document.getElementById("try_showme").checked) keep.push("showme");
+    var label = (document.getElementById("gate_label").value || "showme").trim();
+    var wantLearn = document.getElementById("learn").checked;
+    var isFull = tierName === "full";
+
+    document.getElementById("tryopts").style.opacity = isFull ? "1" : "0.45";
+
+    var parts = [];
+    tier.sections.forEach(function (sec) {
+      var body = [];
+      sec.fragments.forEach(function (key) {
+        if (key === "00-header") key = headerKey;
+        if (key === "40-try") {
+          if (!keep.length) return;
+          body.push(trimTry(DATA.fragments["40-try"], keep, label));
+          return;
+        }
+        if (key === "41-receipt" && keep.indexOf("yourcall") === -1) return;
+        if (key === "42-learn" && !wantLearn) return;
+        body.push(DATA.fragments[key]);
+      });
+      if (!body.length) return;
+      if (sec.heading) parts.push(sec.heading);
+      parts.push(body.join("\n\n"));
+    });
+
+    var markers = (isFull && keep.length) ? "DO / TRY / CONSIDER" : "DO / CONSIDER";
+    var text = parts.join("\n\n").replace(/\{\{MARKERS\}\}/g, markers);
+    if (label && label !== "showme") text = text.replace(/TRY\(showme:\)/g, "TRY(" + label + ":)");
+
+    out.textContent = text;
+    stat.textContent = text.split("\n").length + " lines";
+    return text;
+  }
+
+  form.addEventListener("input", build);
+  form.addEventListener("change", build);
+
+  document.getElementById("copy").addEventListener("click", function () {
+    var btn = this;
+    navigator.clipboard.writeText(out.textContent).then(function () {
+      var old = btn.textContent; btn.textContent = "Copied";
+      setTimeout(function () { btn.textContent = old; }, 1400);
+    }, function () {
+      // Clipboard can be blocked from a file:// page; select the text instead.
+      var r = document.createRange(); r.selectNodeContents(out);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Press Ctrl+C";
+      setTimeout(function () { btn.textContent = "Copy block"; }, 2200);
+    });
+  });
+
+  document.getElementById("download").addEventListener("click", function () {
+    var blob = new Blob([out.textContent], { type: "text/markdown" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "feedback-markers.md";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  });
+
+  build();
+})();
+</script>
+</body>
+</html>

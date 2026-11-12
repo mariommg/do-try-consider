@@ -1,0 +1,58 @@
+This repository is licensed in two parts, because it contains two different
+kinds of thing.
+
+The protocol text is meant to be pasted into other people's configuration files.
+Attaching an attribution requirement to a config snippet would be unenforceable
+in practice and would discourage exactly the adoption the text exists for. So it
+carries no conditions at all. The tooling that builds and tests that text is
+ordinary software, and is licensed as such.
+
+================================================================================
+PART 1. THE PROTOCOL TEXT - CC0 1.0 Universal (public domain dedication)
+================================================================================
+
+Applies to:
+  - everything in fragments/
+  - the paste blocks reproduced in README.md
+  - any block emitted by builder.html
+
+To the extent possible under law, Mario Martinez has waived all copyright and
+related or neighboring rights to the protocol text described above. The work is
+published from the United States.
+
+You may copy, modify, distribute and use the text, including for commercial
+purposes, all without asking and without credit. Take it, cut it, rename it.
+
+Full text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+SPDX-License-Identifier: CC0-1.0
+
+================================================================================
+PART 2. THE TOOLING AND DOCUMENTATION - MIT License
+================================================================================
+
+Applies to everything else in this repository, including build.py,
+builder.template.html, README.template.md, tiers.json and test/.
+
+MIT License
+
+Copyright (c) 2026 Mario Martinez
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+SPDX-License-Identifier: MIT
