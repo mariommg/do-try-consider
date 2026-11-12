@@ -61,10 +61,11 @@ got the mental habit of tagging feedback and want more channels to do it.
   it flag a mismatch? The builder has a header for that (it hands the call back
   to the agent, which is what you were routing around). _This takes a little mental
   adjustment (or at least, it did for me)_.
-- **Look for rules that pull the other way,** like "default to action." Give an
-  agent two conflicting rules and it may follow either.
-- **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, cut it.
-  Most modern harnesses will do this seamlessly, but DO: check your setup.
+- **Look for rules in the rest of your config that pull the other way,** like 
+  "default to action." Give an agent two conflicting rules and it may follow either.
+- **`TRY(coldread:)` needs a fresh agent.** If your setup can't spawn one, cut that
+  section out. Most modern harnesses will do this seamlessly, but DO: check your
+  setup.
 
 ## After you paste
 

@@ -109,7 +109,7 @@
 
     <fieldset>
       <legend>A mislabeled marker</legend>
-      <p class="why">This is the real calibration, and it decides who owns the mistake when you mark something wrong. Pick it on purpose.</p>
+      <p class="why">This is the real calibration, and it decides who owns the mistake when you mark something wrong. Pick purposefully.</p>
       <label class="opt"><input type="radio" name="header" value="00-header" checked>
         <span class="lab">The marker is authoritative</span>
         <span class="desc">The agent never re-tiers you. Pick this if you would rather manage your own hedging than hand the call back to a classifier.</span></label>
@@ -121,13 +121,13 @@
     <fieldset id="tryopts">
       <legend>Attempt-and-gate</legend>
       <p class="why">The agent builds something in scratch, then a gate decides whether it stays. Take it if you already know you want a gatekeeper who isn't you.</p>
-      <label class="opt"><input type="checkbox" id="try_coldread" checked>
+      <label class="opt"><input type="checkbox" id="try_coldread">
         <span class="lab">TRY(coldread:) - a fresh agent rules</span>
         <span class="desc">Needs a setup that can spawn a subagent. It falls back to inline reasoning where it can't, and it quietly stops working in headless or scheduled runs.</span></label>
-      <label class="opt"><input type="checkbox" id="try_yourcall" checked>
+      <label class="opt"><input type="checkbox" id="try_yourcall">
         <span class="lab">TRY(yourcall:) - the agent rules, with a receipt</span>
         <span class="desc">Honestly, this is DO with a mandatory comprehension check. The receipt is the part worth having.</span></label>
-      <label class="opt"><input type="checkbox" id="try_showme" checked>
+      <label class="opt"><input type="checkbox" id="try_showme">
         <span class="lab">TRY(showme:) - you rule</span>
         <span class="desc">Built in scratch, shown to you, kept or binned on your say-so. Not a plan for you to approve: the actual thing, then your call on it.</span></label>
       <p class="why" style="margin-top:12px">
@@ -136,11 +136,11 @@
       </p>
     </fieldset>
 
-    <fieldset>
+    <fieldset id="learnopts">
       <legend>Teaching marker</legend>
       <label class="opt"><input type="checkbox" id="learn">
         <span class="lab">Include <code>learn:</code></span>
-        <span class="desc">Marks a message as something to absorb rather than act on. The agent reflects it back and flags gaps.</span></label>
+        <span class="desc">A one-way CONSIDER:, from you to your agent. It says the lesson back in its own words and flags gaps, but acts on nothing. Full block only.</span></label>
     </fieldset>
   </form>
 
@@ -152,7 +152,7 @@
         <span class="pill" id="stat">0 lines</span>
       </div>
       <pre id="out"></pre>
-      <p class="meta">Paste it under any heading in your standing-instructions file. Then go check that the file you edited is the one your agent actually reads. That one bites people.</p>
+      <p class="meta">Paste it under any heading in your standing-instructions file. Then go check that the file you edited is the one your agent actually reads. That one tends to catch folks unawares.</p>
     </div>
   </div>
 </div>
@@ -367,10 +367,33 @@
     return res;
   }
 
+  // TRY gates and learn: exist only in the Full block. Outside Full their
+  // controls are greyed, unticked and locked, so the form never shows a
+  // ticked box that does nothing. The user's picks come back on return.
+  var FULL_ONLY = ["try_coldread", "try_yourcall", "try_showme", "learn"];
+  var saved = { try_coldread: true, try_yourcall: true, try_showme: true, learn: false };
+  var wasFull = null;
+
+  function gateFullOnly(isFull) {
+    if (isFull === wasFull) return;
+    FULL_ONLY.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (isFull) { el.checked = saved[id]; }
+      else { if (wasFull) saved[id] = el.checked; el.checked = false; }
+      el.disabled = !isFull;
+    });
+    document.getElementById("gate_label").disabled = !isFull;
+    ["tryopts", "learnopts"].forEach(function (id) {
+      document.getElementById(id).style.opacity = isFull ? "1" : "0.45";
+    });
+    wasFull = isFull;
+  }
+
   function build() {
     var tierName = val("tier");
     var tier = DATA.tiers[tierName];
     var headerKey = val("header");
+    gateFullOnly(tierName === "full");
     var keep = [];
     if (document.getElementById("try_coldread").checked) keep.push("coldread");
     if (document.getElementById("try_yourcall").checked) keep.push("yourcall");
@@ -379,7 +402,6 @@
     var wantLearn = document.getElementById("learn").checked;
     var isFull = tierName === "full";
 
-    document.getElementById("tryopts").style.opacity = isFull ? "1" : "0.45";
 
     var parts = [];
     tier.sections.forEach(function (sec) {
