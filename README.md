@@ -33,7 +33,7 @@ That's most of it. There's some more polish available, but it's optional.
 | `TRY(coldread:) rewrite the install section, then have a fresh agent follow it.` *(Full block)* | Drafts it in scratch. Keeps it only if a reviewer with no context can follow it. |
 | `TRY(yourcall:) the CLI's error messages read curt. Soften them if you think it helps.` *(Full block)* | Decides, then leaves a three-line receipt on how it read you. |
 | `TRY(showme:) a dark-mode version of the settings page.` *(Full block)* | Builds it in scratch and shows you the thing itself, not a plan for it. |
-| `learn: staging resets every Sunday night, so Monday row counts mean nothing.` *(Full block)* | Says it back in its own words. Acts on nothing. |
+| `learn: staging resets every Sunday night, so Monday row counts mean nothing.` *(Full block)* | A one-way CONSIDER:, from you to your agent. Says it back in its own words and acts on nothing. |
 
 ## Pick a size
 

@@ -37,6 +37,6 @@
   {
     "needs": "learn",
     "say": "learn: staging resets every Sunday night, so Monday row counts mean nothing.",
-    "does": "Says it back in its own words. Acts on nothing."
+    "does": "A one-way CONSIDER:, from you to your agent. Says it back in its own words and acts on nothing."
   }
 ]
