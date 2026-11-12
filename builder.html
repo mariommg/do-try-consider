@@ -63,6 +63,14 @@
     white-space: pre; margin: 0;
   }
   .meta { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
+  #examples { margin-top: 28px; }
+  #examples h2 { font-size: 16px; margin: 0 0 4px; }
+  .exgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+  .ex code {
+    display: block; white-space: pre-wrap; font-size: 13px; padding: 8px 10px;
+    background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px;
+  }
+  .ex p { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
   .pill {
     display: inline-block; background: var(--accent-soft); color: var(--accent);
     border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600;
@@ -87,7 +95,7 @@
   <form id="form" class="card">
     <fieldset>
       <legend>Start from</legend>
-      <p class="why">Core is the part that actually got used: six weeks of one real deployment, every marker held. Everything past it is opt-in, and each one names the problem it solves.</p>
+      <p class="why">Core is the smallest block that works on its own. Everything past it is opt-in, and each one names the problem it solves.</p>
       <label class="opt"><input type="radio" name="tier" value="core" checked>
         <span class="lab">Core</span>
         <span class="desc">DO, CONSIDER, the tie-break rule, the musing guard. Start here.</span></label>
@@ -112,7 +120,7 @@
 
     <fieldset id="tryopts">
       <legend>Attempt-and-gate</legend>
-      <p class="why">Nobody touched this tier for six weeks. It ships anyway, because the <em>need</em> turned up constantly, just phrased as a question rather than an instruction. Take it if you already know you want a gatekeeper who isn't you.</p>
+      <p class="why">The agent builds something in scratch, then a gate decides whether it stays. Take it if you already know you want a gatekeeper who isn't you.</p>
       <label class="opt"><input type="checkbox" id="try_coldread" checked>
         <span class="lab">TRY(coldread:) - a fresh agent rules</span>
         <span class="desc">Needs a setup that can spawn a subagent. It falls back to inline reasoning where it can't, and it quietly stops working in headless or scheduled runs.</span></label>
@@ -132,7 +140,7 @@
       <legend>Teaching marker</legend>
       <label class="opt"><input type="checkbox" id="learn">
         <span class="lab">Include <code>learn:</code></span>
-        <span class="desc">Marks a message as something to absorb rather than act on. Went unused for six weeks, for whatever that is worth.</span></label>
+        <span class="desc">Marks a message as something to absorb rather than act on. The agent reflects it back and flags gaps.</span></label>
     </fieldset>
   </form>
 
@@ -149,19 +157,24 @@
   </div>
 </div>
 
+<section id="examples" class="card">
+  <h2>What it looks like</h2>
+  <p class="why">Examples for the markers in your block. They change as you pick.</p>
+  <div class="exgrid" id="exgrid"></div>
+</section>
+
 <footer>
   Built from the same fragments as the blocks in the README, so the two can't drift apart.
-  <strong>FINDINGS.md</strong> has the evidence behind these defaults, including where it is thin.
 </footer>
 </div>
 
 <script id="data" type="application/json">{
   "fragments": {
-    "00-header": "## Feedback markers ({{MARKERS}})\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.",
-    "01-header-reflect": "## Feedback markers ({{MARKERS}})\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker as my stated intent. If a marker looks mismatched to what I wrote, say so\nin one line and ask before acting, rather than silently re-tiering it.",
+    "00-header": "## Feedback markers ({{MARKERS}})\n\nAt decision points I mark my feedback with a capitalized-colon token. A marker\ncan tag a whole message or one item inside it, and it covers only what it tags.\nTake the marker at face value. Never re-tier it on suspicion that I mislabeled\nit: the marker is mine to own, and second-guessing it puts the failure back\nwhere this protocol exists to remove it.",
+    "01-header-reflect": "## Feedback markers ({{MARKERS}})\n\nAt decision points I mark my feedback with a capitalized-colon token. A marker\ncan tag a whole message or one item inside it, and it covers only what it tags.\nTake the marker as my stated intent. If a marker looks mismatched to what I\nwrote, say so in one line and ask before acting, rather than silently\nre-tiering it.",
     "10-do": "- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.",
     "11-consider": "- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.",
-    "20-tiebreak": "- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.",
+    "20-tiebreak": "- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n  If a message limits its own scope (\"plan only\", \"build nothing yet\"), that\n  limit wins over the marker's default action. A `DO:` that asks for a plan\n  gets a plan.",
     "21-musing": "- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.",
     "30-scope": "- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.",
     "31-propagation": "- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.",
@@ -175,7 +188,7 @@
     "core": {
       "label": "Core",
       "markers": "DO / CONSIDER",
-      "blurb": "The two tiers and two defaults that six weeks of logged use actually exercised. Start here.",
+      "blurb": "DO, CONSIDER, and the two defaults behind them. Start here.",
       "sections": [
         {
           "heading": null,
@@ -202,7 +215,7 @@
     "standard": {
       "label": "Standard",
       "markers": "DO / CONSIDER",
-      "blurb": "Core plus the rules that matter once markers cross a session or an agent boundary. Add this when you delegate to subagents.",
+      "blurb": "Core, plus rules that keep markers intact across messages and subagents. For when you hand work off.",
       "sections": [
         {
           "heading": null,
@@ -232,7 +245,7 @@
     "full": {
       "label": "Full",
       "markers": "DO / TRY / CONSIDER",
-      "blurb": "Everything, including the attempt-and-gate tier. Unexercised in the reference deployment - adopt it against a symptom, not on spec.",
+      "blurb": "Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper.",
       "sections": [
         {
           "heading": null,
@@ -270,10 +283,52 @@
     }
   },
   "blocks": {
-    "core": "## Feedback markers (DO / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.",
-    "standard": "## Feedback markers (DO / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.\n\n- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.\n\n- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.\n\n- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.",
-    "full": "## Feedback markers (DO / TRY / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. Take the\nmarker at face value. Never re-tier it on suspicion that I mislabeled it: the\nmarker is mine to own, and second-guessing it puts the failure back where this\nprotocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n- **`TRY(gate:)`** Attempt, then gate. The parameter names who rules on whether\n  the attempt is kept. `gate` is one of `coldread`, `yourcall`, `showme`:\n\n  - `TRY(coldread:)` - build it, then route it to a fresh instance with no\n    context from this conversation, ideally a different model family. Keep it if\n    it clears that read. The missing context is the mechanism, not an oversight:\n    do not hand the reviewer the transcript to be helpful. This is the only\n    variant that spawns anything, so a size floor applies: do not spawn for\n    errands. If your environment cannot spawn subagents, degrade to inline\n    reasoning and say that you did.\n  - `TRY(yourcall:)` - your own judgment gates it, and I pre-authorize whichever\n    way you rule. **Never silent.** Emit a receipt (below).\n  - `TRY(showme:)` - build the concrete artifact in scratch, show me, I rule on\n    keep or discard. This is not a plan for my approval: build the thing, then\n    show me the thing.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.\n\n- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.\n\n- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.\n\n- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.\n\n- **Receipt format** (required for `TRY(yourcall:)`, three lines): how I read the\n  feedback; what I took its core to be, meaning what I optimized toward; what I\n  did, and the deciding reason.\n\n  The receipt is a comprehension mirror. It catches confident misreadings, which\n  are more dangerous than wrong decisions because they are invisible. \"I looked\n  at it and I left it as-is\" is a correct and complete outcome, not an unhelpful\n  one.\n\n- **`learn:`** When I mark a message `learn:` I am teaching you something.\n  Reflect your understanding back, flag gaps, integrate it. Do not act on it,\n  and do not argue both sides.\n\nOther things I may ask for in plain English (steelman this, strawman it, teach\nme, ELI15) need no marker. You handle those from plain language, and misreading\nthem costs nothing because they do not touch files."
-  }
+    "core": "## Feedback markers (DO / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. A marker\ncan tag a whole message or one item inside it, and it covers only what it tags.\nTake the marker at face value. Never re-tier it on suspicion that I mislabeled\nit: the marker is mine to own, and second-guessing it puts the failure back\nwhere this protocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n  If a message limits its own scope (\"plan only\", \"build nothing yet\"), that\n  limit wins over the marker's default action. A `DO:` that asks for a plan\n  gets a plan.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.",
+    "standard": "## Feedback markers (DO / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. A marker\ncan tag a whole message or one item inside it, and it covers only what it tags.\nTake the marker at face value. Never re-tier it on suspicion that I mislabeled\nit: the marker is mine to own, and second-guessing it puts the failure back\nwhere this protocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n  If a message limits its own scope (\"plan only\", \"build nothing yet\"), that\n  limit wins over the marker's default action. A `DO:` that asks for a plan\n  gets a plan.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.\n\n- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.\n\n- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.\n\n- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.",
+    "full": "## Feedback markers (DO / TRY / CONSIDER)\n\nAt decision points I mark my feedback with a capitalized-colon token. A marker\ncan tag a whole message or one item inside it, and it covers only what it tags.\nTake the marker at face value. Never re-tier it on suspicion that I mislabeled\nit: the marker is mine to own, and second-guessing it puts the failure back\nwhere this protocol exists to remove it.\n\n### The tiers (closed set)\n\n- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),\n  then execute if it passes. If it trips a wire, stop and name the specific wire.\n  The screen is not a re-litigation of the decision and not deliberation for\n  show. `DO:` binds your action, not your silence about a genuine landmine.\n\n- **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)\n  when there is an actual decision on the table; engage proportionally otherwise.\n  If you conclude a change is warranted, **propose it in writing. Do not make\n  it.**\n\n  `CONSIDER:` is also how I hand you something to react to, including my own\n  reasoning. If I mark a proposal and ask you to check me, push back for real -\n  agreeing with me is not the service being requested.\n\n- **`TRY(gate:)`** Attempt, then gate. The parameter names who rules on whether\n  the attempt is kept. `gate` is one of `coldread`, `yourcall`, `showme`:\n\n  - `TRY(coldread:)` - build it, then route it to a fresh instance with no\n    context from this conversation, ideally a different model family. Keep it if\n    it clears that read. The missing context is the mechanism, not an oversight:\n    do not hand the reviewer the transcript to be helpful. This is the only\n    variant that spawns anything, so a size floor applies: do not spawn for\n    errands. If your environment cannot spawn subagents, degrade to inline\n    reasoning and say that you did.\n  - `TRY(yourcall:)` - your own judgment gates it, and I pre-authorize whichever\n    way you rule. **Never silent.** Emit a receipt (below).\n  - `TRY(showme:)` - build the concrete artifact in scratch, show me, I rule on\n    keep or discard. This is not a plan for my approval: build the thing, then\n    show me the thing.\n\n### Defaults that do the real work\n\n- **Tie-break rule.** Mutation requires positive evidence of a clear imperative.\n  A clear imperative aimed at a deliverable gets done, marked or not. Anything\n  ambiguous, or unmarked and not clearly imperative, resolves to `CONSIDER`. The\n  undefined middle (\"we could tighten the second paragraph\") defaults to\n  no-mutate.\n\n  One message often carries both: a plain instruction and a marked musing. Serve\n  the instruction, hold the marked part. Neither one licenses the other.\n\n  If a message limits its own scope (\"plan only\", \"build nothing yet\"), that\n  limit wins over the marker's default action. A `DO:` that asks for a plan\n  gets a plan.\n\n- **Musing guard.** A musing never silently mutates a deliverable. Subjunctives\n  and observations (\"wouldn't it be cool if\", \"huh, that's weird\") are\n  `CONSIDER`.\n\n- **Per-message scope.** Markers do not latch. A tier applies to the message it\n  appears in, and each message re-marks.\n\n- **Propagation.** Markers travel into any delegation to a subagent. Never\n  launder a tier across an agent boundary: a `CONSIDER:` from me becomes a\n  CONSIDER-shaped subtask, not a silently upgraded DO.\n\n- **Mutation authority.** A deliverable changes only via an explicit `DO:`, an\n  unmarked clear imperative, or a `TRY` whose gate returned \"keep.\" Deliverable\n  means tracked artifacts. Scratch is free.\n\n- **Receipt format** (required for `TRY(yourcall:)`, three lines): how I read the\n  feedback; what I took its core to be, meaning what I optimized toward; what I\n  did, and the deciding reason.\n\n  The receipt is a comprehension mirror. It catches confident misreadings, which\n  are more dangerous than wrong decisions because they are invisible. \"I looked\n  at it and I left it as-is\" is a correct and complete outcome, not an unhelpful\n  one.\n\n- **`learn:`** When I mark a message `learn:` I am teaching you something.\n  Reflect your understanding back, flag gaps, integrate it. Do not act on it,\n  and do not argue both sides.\n\nOther things I may ask for in plain English (steelman this, strawman it, teach\nme, ELI15) need no marker. You handle those from plain language, and misreading\nthem costs nothing because they do not touch files."
+  },
+  "examples": [
+    {
+      "needs": null,
+      "say": "DO: rename the config key to retry_limit everywhere, docs included.",
+      "does": "Checks it won't break anything, then makes the change."
+    },
+    {
+      "needs": null,
+      "say": "CONSIDER: is the no-network rule in our tests still earning its keep? I suspect recorded fixtures would catch more.",
+      "does": "Argues both sides and pushes back if you're wrong. Any change it wants, it proposes in writing. Your files stay put."
+    },
+    {
+      "needs": null,
+      "say": "1. Ship the parser fix and commit. 2. CONSIDER: moving the slow nightly sources onto their own schedule.",
+      "does": "Ships and commits item 1. Gives you a written take on item 2. A marker covers only what it tags."
+    },
+    {
+      "needs": null,
+      "say": "DO: sketch three designs for the import flow. Plan only, build nothing yet.",
+      "does": "Writes up three designs and edits nothing. When a message limits its own scope, the limit wins."
+    },
+    {
+      "needs": "coldread",
+      "say": "TRY(coldread:) rewrite the install section, then have a fresh agent follow it cold.",
+      "does": "Drafts it in scratch and hands it to a reviewer with no context. Keeps it only if it clears that read."
+    },
+    {
+      "needs": "yourcall",
+      "say": "TRY(yourcall:) the CLI's error messages read curt. Soften them if you think it helps.",
+      "does": "Makes the call either way, then leaves a three-line receipt saying how it read you and why."
+    },
+    {
+      "needs": "showme",
+      "say": "TRY(showme:) a dark-mode version of the settings page.",
+      "does": "Builds it in scratch and shows you the real thing. You keep it or toss it."
+    },
+    {
+      "needs": "learn",
+      "say": "learn: staging resets every Sunday night, so Monday-morning row counts mean nothing.",
+      "does": "Says it back in its own words and flags gaps. Acts on nothing."
+    }
+  ]
 }</script>
 <script>
 (function () {
@@ -351,7 +406,25 @@
 
     out.textContent = text;
     stat.textContent = text.split("\n").length + " lines";
+    renderExamples(isFull, keep, wantLearn, label);
     return text;
+  }
+
+  function renderExamples(isFull, keep, wantLearn, label) {
+    // Show only examples whose marker is in the block the user just built.
+    var grid = document.getElementById("exgrid");
+    grid.textContent = "";
+    DATA.examples.forEach(function (ex) {
+      var on = ex.needs === null
+        || (ex.needs === "learn" ? isFull && wantLearn : isFull && keep.indexOf(ex.needs) !== -1);
+      if (!on) return;
+      var say = ex.say;
+      if (label && label !== "showme") say = say.replace(/TRY\(showme:\)/g, "TRY(" + label + ":)");
+      var card = document.createElement("div"); card.className = "ex";
+      var code = document.createElement("code"); code.textContent = say;
+      var p = document.createElement("p"); p.textContent = ex.does;
+      card.appendChild(code); card.appendChild(p); grid.appendChild(card);
+    });
   }
 
   form.addEventListener("input", build);

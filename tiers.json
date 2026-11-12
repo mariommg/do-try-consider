@@ -2,7 +2,7 @@
   "core": {
     "label": "Core",
     "markers": "DO / CONSIDER",
-    "blurb": "The two tiers and two defaults that six weeks of logged use actually exercised. Start here.",
+    "blurb": "DO, CONSIDER, and the two defaults behind them. Start here.",
     "sections": [
       {
         "heading": null,
@@ -29,7 +29,7 @@
   "standard": {
     "label": "Standard",
     "markers": "DO / CONSIDER",
-    "blurb": "Core plus the rules that matter once markers cross a session or an agent boundary. Add this when you delegate to subagents.",
+    "blurb": "Core, plus rules that keep markers intact across messages and subagents. For when you hand work off.",
     "sections": [
       {
         "heading": null,
@@ -59,7 +59,7 @@
   "full": {
     "label": "Full",
     "markers": "DO / TRY / CONSIDER",
-    "blurb": "Everything, including the attempt-and-gate tier. Unexercised in the reference deployment - adopt it against a symptom, not on spec.",
+    "blurb": "Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper.",
     "sections": [
       {
         "heading": null,

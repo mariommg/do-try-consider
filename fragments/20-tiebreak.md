@@ -6,3 +6,7 @@
 
   One message often carries both: a plain instruction and a marked musing. Serve
   the instruction, hold the marked part. Neither one licenses the other.
+
+  If a message limits its own scope ("plan only", "build nothing yet"), that
+  limit wins over the marker's default action. A `DO:` that asks for a plan
+  gets a plan.

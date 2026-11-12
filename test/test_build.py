@@ -59,13 +59,13 @@ def test_no_orphan_fragments():
     assert not orphans, f"unused fragments: {sorted(orphans)}"
 
 
-def test_core_is_the_evidence_backed_subset():
+def test_core_is_the_minimal_subset():
     _, _, b = blocks()
     core = b["core"]
     for required in ["`DO:`", "`CONSIDER:`", "Tie-break rule", "Musing guard"]:
         assert required in core, f"Core block lost {required}"
-    assert "TRY(" not in core, "Core must not carry the unexercised gate tier"
-    assert "learn:" not in core, "Core must not carry the unused teaching marker"
+    assert "TRY(" not in core, "Core must not carry the TRY gate tier"
+    assert "learn:" not in core, "Core must not carry the teaching marker"
 
 
 def test_tiers_are_strictly_nested():
@@ -107,21 +107,65 @@ def test_readme_embeds_every_block_verbatim():
         assert block in readme, f"README is missing the {name} block verbatim"
 
 
+def test_tier_table_is_a_real_markdown_table():
+    """GitHub only renders a pipe table when a header row and a |---| delimiter
+    row come first. Without them the rows show up as loose text with pipes."""
+    tiers, _, _ = blocks()
+    readme = read(os.path.join(ROOT, "README.md")).splitlines()
+    first_label = "| %s |" % next(iter(tiers.values()))["label"]
+    row = next((i for i, line in enumerate(readme) if line.startswith(first_label)), None)
+    assert row is not None, "tier table not found in README.md"
+    assert row >= 2, "tier table starts too close to the top to have a header"
+    header, delimiter = readme[row - 2], readme[row - 1]
+    assert header.startswith("|") and header.rstrip().endswith("|"), (
+        "tier table has no header row; got: %r" % header)
+    assert re.fullmatch(r"\|(\s*:?-{3,}:?\s*\|)+", delimiter.strip()), (
+        "tier table has no |---| delimiter row; got: %r" % delimiter)
+
+
 def test_builder_data_is_valid_json():
     html = read(os.path.join(ROOT, "builder.html"))
     m = re.search(r'<script id="data" type="application/json">(.*?)</script>', html, re.S)
     assert m, "builder.html lost its embedded data block"
     payload = json.loads(m.group(1))
-    assert set(payload) == {"fragments", "tiers", "blocks"}
+    assert set(payload) == {"fragments", "tiers", "blocks", "examples"}
     assert payload["blocks"]["core"], "builder shipped an empty core block"
+
+
+def test_examples_match_the_blocks():
+    """An example must only show a marker that its block actually defines, or a
+    reader copies an example the agent was never taught. Every marker the Full
+    block defines should get at least one example."""
+    _, _, b = blocks()
+    examples = json.loads(read(os.path.join(ROOT, "examples.json")))
+    readme = read(os.path.join(ROOT, "README.md"))
+    tokens = {None: ["DO:", "CONSIDER:"], "coldread": ["TRY(coldread:)"],
+              "yourcall": ["TRY(yourcall:)"], "showme": ["TRY(showme:)"], "learn": ["learn:"]}
+    shown = set()
+    for ex in examples:
+        assert ex["needs"] in tokens, f"unknown needs: {ex['needs']!r}"
+        hits = [t for t in sum(tokens.values(), []) if t in ex["say"]]
+        assert hits, f"example uses no marker: {ex['say']!r}"
+        if ex["needs"] is None:
+            assert all(h in ("DO:", "CONSIDER:") for h in hits), (
+                f"core example uses a Full-only marker: {ex['say']!r}")
+        for h in hits:
+            assert h in (b["core"] if ex["needs"] is None else b["full"]), (
+                f"{h} is not defined in the block this example belongs to")
+        shown.update(hits)
+        assert ex["say"] in readme, f"README is missing example {ex['say']!r}"
+        assert "|" not in ex["say"] + ex["does"], "a pipe would break the README table"
+    assert shown == set(sum(tokens.values(), [])), (
+        f"markers with no example: {sorted(set(sum(tokens.values(), [])) - shown)}")
 
 
 def test_house_style_no_em_dashes():
     """These blocks get pasted into other people's files under the author's name,
     and the house style forbids em and en dashes. Easy to reintroduce by hand."""
     fragments = build.load_fragments()
+    fragments["examples.json"] = read(os.path.join(ROOT, "examples.json"))
     offenders = [k for k, v in fragments.items() if "—" in v or "–" in v]
-    assert not offenders, f"em/en dash in fragments: {offenders}"
+    assert not offenders, f"em/en dash in fragments or examples: {offenders}"
 
 
 if __name__ == "__main__":

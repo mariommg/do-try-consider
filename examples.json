@@ -1,0 +1,42 @@
+[
+  {
+    "needs": null,
+    "say": "DO: rename the config key to retry_limit everywhere, docs included.",
+    "does": "Checks it won't break anything, then makes the change."
+  },
+  {
+    "needs": null,
+    "say": "CONSIDER: is the no-network rule in our tests still earning its keep? I suspect recorded fixtures would catch more.",
+    "does": "Argues both sides and pushes back if you're wrong. Any change it wants, it proposes in writing. Your files stay put."
+  },
+  {
+    "needs": null,
+    "say": "1. Ship the parser fix and commit. 2. CONSIDER: moving the slow nightly sources onto their own schedule.",
+    "does": "Ships and commits item 1. Gives you a written take on item 2. A marker covers only what it tags."
+  },
+  {
+    "needs": null,
+    "say": "DO: sketch three designs for the import flow. Plan only, build nothing yet.",
+    "does": "Writes up three designs and edits nothing. When a message limits its own scope, the limit wins."
+  },
+  {
+    "needs": "coldread",
+    "say": "TRY(coldread:) rewrite the install section, then have a fresh agent follow it cold.",
+    "does": "Drafts it in scratch and hands it to a reviewer with no context. Keeps it only if it clears that read."
+  },
+  {
+    "needs": "yourcall",
+    "say": "TRY(yourcall:) the CLI's error messages read curt. Soften them if you think it helps.",
+    "does": "Makes the call either way, then leaves a three-line receipt saying how it read you and why."
+  },
+  {
+    "needs": "showme",
+    "say": "TRY(showme:) a dark-mode version of the settings page.",
+    "does": "Builds it in scratch and shows you the real thing. You keep it or toss it."
+  },
+  {
+    "needs": "learn",
+    "say": "learn: staging resets every Sunday night, so Monday-morning row counts mean nothing.",
+    "does": "Says it back in its own words and flags gaps. Acts on nothing."
+  }
+]
