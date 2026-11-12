@@ -44,9 +44,9 @@ you.
 
 | Block | Lines | What it covers |
 |---|---|---|
-| Core | 42 | DO, CONSIDER, and the two defaults behind them. Start here. |
-| Standard | 53 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
-| Full | 86 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
+| Core | 50 | DO, CONSIDER, and the two defaults behind them. Start here. |
+| Standard | 60 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
+| Full | 93 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
 
 Start with Core: it's the smallest block that works on its own. Move to
 Standard when you hand work to subagents; it stops a `CONSIDER:` from quietly
@@ -66,12 +66,20 @@ Take the marker at face value. Never re-tier it on suspicion that I mislabeled
 it: the marker is mine to own, and second-guessing it puts the failure back
 where this protocol exists to remove it.
 
+These markers govern how you read my feedback. Once a message licenses work,
+carry that work through, including the edits it needs, without asking again.
+
 ### The tiers (closed set)
 
 - **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),
   then execute if it passes. If it trips a wire, stop and name the specific wire.
   The screen is not a re-litigation of the decision and not deliberation for
   show. `DO:` binds your action, not your silence about a genuine landmine.
+
+  To mutate is to change a deliverable: anything of mine that persists outside
+  scratch, such as project files, commits, config, and anything sent or
+  deployed. Reading, running checks, and scratch work are free under every
+  marker.
 
 - **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)
   when there is an actual decision on the table; engage proportionally otherwise.
@@ -114,12 +122,20 @@ Take the marker at face value. Never re-tier it on suspicion that I mislabeled
 it: the marker is mine to own, and second-guessing it puts the failure back
 where this protocol exists to remove it.
 
+These markers govern how you read my feedback. Once a message licenses work,
+carry that work through, including the edits it needs, without asking again.
+
 ### The tiers (closed set)
 
 - **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),
   then execute if it passes. If it trips a wire, stop and name the specific wire.
   The screen is not a re-litigation of the decision and not deliberation for
   show. `DO:` binds your action, not your silence about a genuine landmine.
+
+  To mutate is to change a deliverable: anything of mine that persists outside
+  scratch, such as project files, commits, config, and anything sent or
+  deployed. Reading, running checks, and scratch work are free under every
+  marker.
 
 - **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)
   when there is an actual decision on the table; engage proportionally otherwise.
@@ -157,8 +173,7 @@ where this protocol exists to remove it.
   CONSIDER-shaped subtask, not a silently upgraded DO.
 
 - **Mutation authority.** A deliverable changes only via an explicit `DO:`, an
-  unmarked clear imperative, or a `TRY` whose gate returned "keep." Deliverable
-  means tracked artifacts. Scratch is free.
+  unmarked clear imperative, or a `TRY` whose gate returned "keep."
 ```
 
 </details>
@@ -175,12 +190,20 @@ Take the marker at face value. Never re-tier it on suspicion that I mislabeled
 it: the marker is mine to own, and second-guessing it puts the failure back
 where this protocol exists to remove it.
 
+These markers govern how you read my feedback. Once a message licenses work,
+carry that work through, including the edits it needs, without asking again.
+
 ### The tiers (closed set)
 
 - **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),
   then execute if it passes. If it trips a wire, stop and name the specific wire.
   The screen is not a re-litigation of the decision and not deliberation for
   show. `DO:` binds your action, not your silence about a genuine landmine.
+
+  To mutate is to change a deliverable: anything of mine that persists outside
+  scratch, such as project files, commits, config, and anything sent or
+  deployed. Reading, running checks, and scratch work are free under every
+  marker.
 
 - **`CONSIDER:`** Reason. Do not mutate. Give both sides (steelman and strawman)
   when there is an actual decision on the table; engage proportionally otherwise.
@@ -234,8 +257,7 @@ where this protocol exists to remove it.
   CONSIDER-shaped subtask, not a silently upgraded DO.
 
 - **Mutation authority.** A deliverable changes only via an explicit `DO:`, an
-  unmarked clear imperative, or a `TRY` whose gate returned "keep." Deliverable
-  means tracked artifacts. Scratch is free.
+  unmarked clear imperative, or a `TRY` whose gate returned "keep."
 
 - **Receipt format** (required for `TRY(yourcall:)`, three lines): how I read the
   feedback; what I took its core to be, meaning what I optimized toward; what I
