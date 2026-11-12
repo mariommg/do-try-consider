@@ -44,9 +44,9 @@ you.
 
 | Block | Lines | What it covers |
 |---|---|---|
-| Core | 50 | DO, CONSIDER, and the two defaults behind them. Start here. |
-| Standard | 60 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
-| Full | 93 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
+| Core | 51 | DO, CONSIDER, and the two defaults behind them. Start here. |
+| Standard | 61 | Core, plus rules that keep markers intact across messages and subagents. For when you hand work off. |
+| Full | 94 | Standard, plus TRY: the agent attempts, then a gate decides what stays. For when you want a gatekeeper. |
 
 Start with Core: it's the smallest block that works on its own. Move to
 Standard when you hand work to subagents; it stops a `CONSIDER:` from quietly
@@ -71,10 +71,11 @@ carry that work through, including the edits it needs, without asking again.
 
 ### The tiers (closed set)
 
-- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),
-  then execute if it passes. If it trips a wire, stop and name the specific wire.
-  The screen is not a re-litigation of the decision and not deliberation for
-  show. `DO:` binds your action, not your silence about a genuine landmine.
+- **`DO:`** Mutate. Check correctness, safety, and coherence first. Stop only if
+  executing would break something or contradict another instruction of mine,
+  and name the specific problem. Otherwise execute, and raise smaller concerns
+  afterward. The check is not a re-litigation of the decision. `DO:` binds your
+  action, not your silence about a genuine landmine.
 
   To mutate is to change a deliverable: anything of mine that persists outside
   scratch, such as project files, commits, config, and anything sent or
@@ -127,10 +128,11 @@ carry that work through, including the edits it needs, without asking again.
 
 ### The tiers (closed set)
 
-- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),
-  then execute if it passes. If it trips a wire, stop and name the specific wire.
-  The screen is not a re-litigation of the decision and not deliberation for
-  show. `DO:` binds your action, not your silence about a genuine landmine.
+- **`DO:`** Mutate. Check correctness, safety, and coherence first. Stop only if
+  executing would break something or contradict another instruction of mine,
+  and name the specific problem. Otherwise execute, and raise smaller concerns
+  afterward. The check is not a re-litigation of the decision. `DO:` binds your
+  action, not your silence about a genuine landmine.
 
   To mutate is to change a deliverable: anything of mine that persists outside
   scratch, such as project files, commits, config, and anything sent or
@@ -195,10 +197,11 @@ carry that work through, including the edits it needs, without asking again.
 
 ### The tiers (closed set)
 
-- **`DO:`** Mutate. Run a sanity screen first (correctness, safety, coherence),
-  then execute if it passes. If it trips a wire, stop and name the specific wire.
-  The screen is not a re-litigation of the decision and not deliberation for
-  show. `DO:` binds your action, not your silence about a genuine landmine.
+- **`DO:`** Mutate. Check correctness, safety, and coherence first. Stop only if
+  executing would break something or contradict another instruction of mine,
+  and name the specific problem. Otherwise execute, and raise smaller concerns
+  afterward. The check is not a re-litigation of the decision. `DO:` binds your
+  action, not your silence about a genuine landmine.
 
   To mutate is to change a deliverable: anything of mine that persists outside
   scratch, such as project files, commits, config, and anything sent or
