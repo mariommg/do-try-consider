@@ -10,9 +10,12 @@ X," and there's a fair chance X is now in your files. Agents lean hard toward
 doing. Every shade of intent gets rounded up to an edit, and you get to find it,
 undo it, and check what else moved.
 
-So you adapt. You tack "don't change anything yet" onto every message, or you
-soften real instructions so they won't be over-read. Either way you're managing
-the agent's guesswork instead of doing your work.
+Newer agents also miss the other way. Ask softly ("could we tighten this up?")
+and you may get a suggestion back when you wanted the change.
+
+So you adapt. You tack "don't change anything yet" onto one message and "no,
+actually do it" onto the next. Either way you're managing the agent's guesswork
+instead of doing your work.
 
 This gives you a small, closed set of markers for your own feedback. `CONSIDER:`
 means think it through and propose in writing. `DO:` means make the change. The
@@ -284,7 +287,8 @@ them costs nothing because they do not touch files.
 
 ## Before you paste
 
-A few settings are one person's calibration. Decide them on purpose.
+A few settings are one person's calibration, plus one check. Decide them on
+purpose.
 
 - **The marker is final.** The block tells the agent never to second-guess your
   marker, even if it suspects you mislabeled it. If you'd rather it flag a
@@ -294,11 +298,18 @@ A few settings are one person's calibration. Decide them on purpose.
   runs headless or on a schedule, cut it.
 - **Gate names are yours.** Rename `showme` if your own name reads better in a
   transcript. Just keep the set closed.
+- **Check for rules that pull the other way.** If the same file also says
+  something like "default to action," the agent now has two rules and may
+  follow either one. Keep the one you mean.
 
 ## After you paste
 
 Check that the file you edited is the one your agent actually reads. It's easy
 to have this working through an agent's memory on one machine and nowhere else.
+
+One trap to know about: Claude Code reads `AGENTS.md` only when there's no
+`CLAUDE.md` in that folder or above it. If you have both, add a line with
+`@AGENTS.md` to your `CLAUDE.md` so it pulls the other file in.
 
 ## Editing the protocol
 
